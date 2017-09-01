@@ -1670,6 +1670,14 @@ static int loop_add(struct loop_device **l, int i)
 	if (!lo->lo_queue)
 		goto out_free_idr;
 
+	lo->lo_queue = blk_mq_init_queue(&lo->tag_set);
+	if (IS_ERR_OR_NULL(lo->lo_queue)) {
+		err = PTR_ERR(lo->lo_queue);
+		goto out_cleanup_tags;
+	}
+	lo->lo_queue->queuedata = lo;
+
+	blk_queue_max_hw_sectors(lo->lo_queue, BLK_DEF_MAX_SECTORS);
 	/*
 	 * set queue make_request_fn
 	 */
