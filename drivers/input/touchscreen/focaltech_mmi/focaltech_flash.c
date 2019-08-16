@@ -2055,15 +2055,16 @@ int fts_extra_init(struct i2c_client *client, struct input_dev *input_dev, struc
 		fts_data->ic_info.hid_supported = false;
 	}
 #endif
-#ifdef CONFIG_TOUCHSCREEN_FOCALTECH_UPGRADE_8006U_MMI
+
 	if (FT8006U_ID == type) {
-		FTS_AUTO_LIC_UPGRADE_EN = false;
+#ifdef CONFIG_TOUCHSCREEN_FOCALTECH_UPGRADE_8006U_MMI
+		FTS_AUTO_LIC_UPGRADE_EN = true;
 		fwupgrade->func = &upgrade_func_ft8006u;
 		fts_data->ic_info.ids = ft8006u_fct;
 		fts_data->ic_info.is_incell = true;
 		fts_data->ic_info.hid_supported = false;
-	}
 #endif
+	}
 	return 0;
 }
 #endif
